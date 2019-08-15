@@ -1,0 +1,20 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "Python: Django",
+            "type": "python",
+            "request": "launch",
+            "program": "${workspaceFolder}/manage.py",
+            "console": "integratedTerminal",
+            "args": [
+                "runserver",
+                "--noreload",
+                "8089"
+            ],
+            "env": {"DJANGO_SETTINGS_MODULE":"galaxy.settings.development"},
+            "django": true
+        }
+    ],
+    "compounds": []
+}

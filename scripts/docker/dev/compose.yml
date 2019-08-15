@@ -6,7 +6,7 @@ services:
     volumes:
       - ${PWD}:/galaxy:z
     ports:
-      - '8000:8000'
+      - '8087:8000'
     depends_on:
       - postgres
       - influxdb

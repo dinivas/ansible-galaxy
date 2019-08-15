@@ -55,7 +55,7 @@ DATABASES = {
         'NAME': 'galaxy',
         'USER': 'galaxy',
         'PASSWORD': 'galaxy',
-        'HOST': 'postgres',
+        'HOST': 'localhost',
         'PORT': 5432,
         'CONN_MAX_AGE': None,
         'ENGINE': 'django.db.backends.postgresql_psycopg2',

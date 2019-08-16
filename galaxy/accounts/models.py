@@ -39,7 +39,7 @@ class CustomUser(auth_models.AbstractBaseUser,
     """
     username = models.CharField(
         _('username'),
-        max_length=30,
+        max_length=254,
         unique=True,
         help_text=_('Required. 30 characters or fewer. Letters, numbers and '
                     '@/./+/-/_ characters'),
@@ -48,6 +48,8 @@ class CustomUser(auth_models.AbstractBaseUser,
                                       _('Enter a valid username.'),
                                       'invalid')
         ])
+    first_name = models.CharField(_('first name'), max_length=254, blank=True)
+    last_name = models.CharField(_('last name'), max_length=254, blank=True)
     full_name = models.CharField(_('full name'), max_length=254, blank=True)
     # FIXME: This field looks unused
     short_name = models.CharField(_('short name'), max_length=30, blank=True)

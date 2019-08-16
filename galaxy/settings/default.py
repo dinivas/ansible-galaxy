@@ -74,6 +74,8 @@ INSTALLED_APPS = (
 
     'pulpcore.app',
 
+    'django_keycloak.apps.KeycloakAppConfig',
+
     # Project apps
     'galaxy.accounts',
     'galaxy.main',
@@ -90,6 +92,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'django_keycloak.middleware.KeycloakStatelessBearerAuthenticationMiddleware',
     'django_prometheus.middleware.PrometheusAfterMiddleware',
 ]
 
@@ -120,10 +123,18 @@ WSGI_APPLICATION = 'galaxy.wsgi.application'
 AUTHENTICATION_BACKENDS = (
     # Required for login by username in Django admin
     'django.contrib.auth.backends.ModelBackend',
-    'allauth.account.auth_backends.AuthenticationBackend',
+    'django_keycloak.auth.backends.KeycloakIDTokenAuthorizationBackend'
 )
 
 AUTH_USER_MODEL = 'accounts.CustomUser'
+
+KEYCLOAK_OIDC_PROFILE_MODEL = 'django_keycloak.OpenIdConnectProfile'
+
+KEYCLOAK_BEARER_AUTHENTICATION_EXEMPT_PATHS = [
+    r'^admin/',
+]
+
+KEYCLOAK_SKIP_SSL_VERIFY = True
 
 LOGIN_URL = '/accounts/login/'
 

@@ -92,8 +92,9 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
-    'django_keycloak.middleware.KeycloakStatelessBearerAuthenticationMiddleware',
-    'django_prometheus.middleware.PrometheusAfterMiddleware',
+    'django_keycloak.middleware.BaseKeycloakMiddleware',
+    'django_keycloak.middleware.KeycloakStatelessBearerAuthenticationMiddleware'
+    # 'django_prometheus.middleware.PrometheusAfterMiddleware',
 ]
 
 ROOT_URLCONF = 'galaxy.urls'
@@ -123,6 +124,7 @@ WSGI_APPLICATION = 'galaxy.wsgi.application'
 AUTHENTICATION_BACKENDS = (
     # Required for login by username in Django admin
     'django.contrib.auth.backends.ModelBackend',
+    # 'django_keycloak.auth.backends.KeycloakAuthorizationCodeBackend'
     'django_keycloak.auth.backends.KeycloakIDTokenAuthorizationBackend'
 )
 
@@ -132,6 +134,7 @@ KEYCLOAK_OIDC_PROFILE_MODEL = 'django_keycloak.OpenIdConnectProfile'
 
 KEYCLOAK_BEARER_AUTHENTICATION_EXEMPT_PATHS = [
     r'^admin/',
+    r'^accounts/'
 ]
 
 KEYCLOAK_SKIP_SSL_VERIFY = True
@@ -292,6 +295,8 @@ SOCIALACCOUNT_PROVIDERS = {
         'SCOPE': ['user:email', 'read:org']
     },
 }
+
+SOCIALACCOUNT_ADAPTER = 'galaxy.main.auth.SocialAccountAdapter'
 
 SOCIALACCOUNT_AVATAR_SUPPORT = True
 

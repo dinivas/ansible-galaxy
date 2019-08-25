@@ -114,3 +114,5 @@ WAIT_FOR = [
     {'host': 'rabbitmq', 'port': 5672},
     {'host': 'influxdb', 'port': 8086},
 ]
+
+SOCIALACCOUNT_AFTER_CONNECT_REDIRECT_URL = 'http://localhost:4200/build/ansible/galaxy/settings'

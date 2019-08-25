@@ -2,7 +2,7 @@
     "version": "0.2.0",
     "configurations": [
         {
-            "name": "Python: Django",
+            "name": "Python:Django - Ansible galaxy",
             "type": "python",
             "request": "launch",
             "program": "${workspaceFolder}/manage.py",
@@ -13,7 +13,8 @@
                 "8089"
             ],
             "env": {"DJANGO_SETTINGS_MODULE":"galaxy.settings.development"},
-            "django": true
+            "django": true,
+            "justMyCode":false
         }
     ],
     "compounds": []

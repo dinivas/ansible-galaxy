@@ -17,6 +17,7 @@
 
 from allauth.account.adapter import DefaultAccountAdapter
 from allauth.account.signals import password_changed, password_set
+from allauth.socialaccount.adapter import DefaultSocialAccountAdapter
 
 from django.conf import settings
 from django.contrib import messages
@@ -48,3 +49,13 @@ class AccountAdapter(DefaultAccountAdapter):
             return '/accounts/connect'
         else:
             return self.default_login_redirect_url(request)
+
+
+class SocialAccountAdapter(DefaultSocialAccountAdapter):
+    def get_connect_redirect_url(self, request, socialaccount):
+        assert request.user.is_authenticated
+        if hasattr(settings, 'SOCIALACCOUNT_AFTER_CONNECT_REDIRECT_URL'):
+            return settings.SOCIALACCOUNT_AFTER_CONNECT_REDIRECT_URL
+        else:
+            return super().get_connect_redirect_url(
+                self, request, socialaccount)

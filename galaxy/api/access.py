@@ -274,7 +274,7 @@ class NamespaceAccess(BaseAccess):
         return True
 
     def can_add(self, data):
-        return self.user.is_authenticated and self.user.is_staff
+        return self.user.is_authenticated  # and self.user.is_staff
 
     def can_change(self, obj, data):
         return self.user.is_authenticated

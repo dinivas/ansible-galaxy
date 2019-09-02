@@ -20,6 +20,7 @@
 #    `re_path()` function, however it's usage is discouraged.
 #    New path-like routes should be preferred over old-style regexp routes.
 from django.urls import include, path, re_path as url
+from django.views.decorators.csrf import csrf_exempt
 
 from galaxy.api import views
 

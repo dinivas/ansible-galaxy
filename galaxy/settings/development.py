@@ -84,18 +84,20 @@ DEBUG_TOOLBAR_PATCH_SETTINGS = False
 # Celery settings
 # ---------------------------------------------------------
 
-BROKER_URL = 'amqp://galaxy:galaxy@rabbitmq:5672/galaxy'
+# BROKER_URL = 'amqp://galaxy:galaxy@rabbitmq:5672/galaxy'
+BROKER_URL = 'amqp://galaxy:galaxy@localhost:5672/galaxy'
 
 # Redis
 # ---------------------------------------------------------
 
-REDIS_HOST = 'redis'
+REDIS_HOST = 'localhost'
 REDIS_PORT = 6379
 
 # InfluxDB
 # ---------------------------------------------------------
 
-INFLUX_DB_HOST = 'influxdb'
+INFLUX_DB_HOST = 'localhost'
+# INFLUX_DB_HOST = 'influxdb'
 INFLUX_DB_PORT = 8086
 INFLUX_DB_USERNAME = 'admin'
 INFLUX_DB_PASSWORD = 'admin'
@@ -111,8 +113,8 @@ SITE_NAME = 'localhost'
 
 WAIT_FOR = [
     {'host': 'postgres', 'port': 5432},
-    {'host': 'rabbitmq', 'port': 5672},
-    {'host': 'influxdb', 'port': 8086},
+    {'host': 'localhost', 'port': 5672},
+    {'host': 'localhost', 'port': 8086},
 ]
 
 SOCIALACCOUNT_AFTER_CONNECT_REDIRECT_URL = 'http://localhost:4200/build/ansible/galaxy/settings'

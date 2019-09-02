@@ -27,6 +27,7 @@ from django.core.exceptions import ObjectDoesNotExist
 from galaxy.main.models import Provider, ProviderNamespace
 from .base_views import ListAPIView
 from ..githubapi import GithubAPI
+from ..keycloak import get_provider_token_from_keycloak
 from ..serializers import ProviderSourceSerializer
 
 
@@ -51,7 +52,8 @@ class ProviderSourceList(ListAPIView):
         sources = []
         for provider in Provider.objects.filter(active=True):
             if provider.name.lower() == 'github':
-                sources += GithubAPI(user=request.user).user_namespaces()
+                keyCloakIdpToken = get_provider_token_from_keycloak(request, 'github')
+                sources += GithubAPI(user=request.user, access_token=keyCloakIdpToken['access_token']).user_namespaces()
                 for source in sources:
                     source['provider'] = {
                         'id': provider.pk,

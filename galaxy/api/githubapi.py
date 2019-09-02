@@ -32,8 +32,9 @@ logger = logging.getLogger(__name__)
 
 class GithubAPI(object):
 
-    def __init__(self, user=None):
+    def __init__(self, user=None, access_token=None):
         self.user = user
+        self.access_token = access_token
         self.client = self.get_client()
         provider = self.get_provider()
         self.provider_name = provider.name
@@ -51,14 +52,7 @@ class GithubAPI(object):
 
     def get_client(self):
         try:
-            gh_token = SocialToken.objects.get(account__user=self.user,
-                                               account__provider='github')
-        except ObjectDoesNotExist:
-            raise Exception(
-                "User does not have a GitHub OAuth token"
-            )
-        try:
-            client = Github(gh_token.token)
+            client = Github(self.access_token)
         except GithubException as exc:
             raise Exception("Failed to connect to the GitHub API {0} - {1}"
                             .format(exc.data, exc.status))

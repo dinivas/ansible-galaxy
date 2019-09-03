@@ -23,7 +23,7 @@ from galaxy.worker import tasks as worker_tasks
 
 def create_import_task(
         repository, user, import_branch=None, travis_status_url='',
-        travis_build_url='', user_initiated=False):
+        travis_build_url='', user_initiated=False, provider_api_token=''):
 
     # if no import_branch specified, use repo import_branch
     import_branch = import_branch or repository.import_branch
@@ -34,7 +34,8 @@ def create_import_task(
         import_branch=import_branch,
         travis_status_url=travis_status_url,
         travis_build_url=travis_build_url,
-        state=models.ImportTask.STATE_PENDING
+        state=models.ImportTask.STATE_PENDING,
+        provider_api_token=provider_api_token
     )
     worker_tasks.import_repository.delay(
         task.id,

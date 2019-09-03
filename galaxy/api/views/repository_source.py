@@ -65,7 +65,10 @@ class RepositorySourceList(ListAPIView):
             )
         except ObjectDoesNotExist:
             provider_namespace = None
-        keyCloakIdpToken = get_provider_token_from_keycloak(request, 'github')
+        keycloakUrl = request.realm.realm_api_client.server_url
+        keycloakRealm = request.realm.name
+        bearer_token = request.META.get('HTTP_AUTHORIZATION').split()[1]
+        keyCloakIdpToken = get_provider_token_from_keycloak(keycloakUrl, keycloakRealm, bearer_token, 'github')
         if provider.name.lower() == 'github':
             repos = GithubAPI(user=request.user, access_token=keyCloakIdpToken['access_token']).get_namespace_repositories(
                 request_namespace

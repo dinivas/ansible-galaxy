@@ -50,6 +50,7 @@ from galaxy.api.views import base_views
 from galaxy.main.celerytasks import tasks as celerytasks
 from galaxy.main import models
 from galaxy.common import version, sanitize_content_name
+from galaxy.api.keycloak import get_provider_token_from_keycloak
 
 
 logger = logging.getLogger(__name__)
@@ -430,10 +431,15 @@ class ImportTaskList(base_views.ListCreateAPIView):
                 raise PermissionDenied(
                     "You are not an owner of {0}".format(repository.name)
                 )
-
+        # Add provider token retrieved from Keycloak
+        keycloakUrl = request.realm.realm_api_client.server_url
+        keycloakRealm = request.realm.name
+        provider_name = repository.provider_namespace.provider.name.lower()
+        bearer_token = request.META.get('HTTP_AUTHORIZATION').split()[1]
+        provider_api_token = get_provider_token_from_keycloak(keycloakUrl, keycloakRealm, bearer_token, provider_name)
         task = tasks.create_import_task(
             repository, request.user,
-            import_branch=github_reference, user_initiated=True)
+            import_branch=github_reference, user_initiated=True, provider_api_token=provider_api_token['access_token'])
 
         serializer = self.get_serializer(instance=task)
         response = {'results': [serializer.data]}

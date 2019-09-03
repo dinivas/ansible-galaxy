@@ -89,7 +89,7 @@ def _import_repository(import_task, logger):
                 .format(import_task.id, repo_full_name))
     logger.info(' ')
 
-    token = _get_social_token(import_task)
+    token = import_task.provider_api_token
     gh_api = github.Github(token)
     gh_repo = gh_api.get_repo(repo_full_name)
 

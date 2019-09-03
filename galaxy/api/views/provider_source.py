@@ -50,9 +50,12 @@ class ProviderSourceList(ListAPIView):
         for the requesting user.
         """
         sources = []
+        keycloakUrl = request.realm.realm_api_client.server_url
+        keycloakRealm = request.realm.name
         for provider in Provider.objects.filter(active=True):
             if provider.name.lower() == 'github':
-                keyCloakIdpToken = get_provider_token_from_keycloak(request, 'github')
+                bearer_token = request.META.get('HTTP_AUTHORIZATION').split()[1]
+                keyCloakIdpToken = get_provider_token_from_keycloak(keycloakUrl, keycloakRealm, bearer_token, 'github')
                 sources += GithubAPI(user=request.user, access_token=keyCloakIdpToken['access_token']).user_namespaces()
                 for source in sources:
                     source['provider'] = {

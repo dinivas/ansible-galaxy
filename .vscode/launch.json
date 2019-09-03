@@ -1,21 +1,42 @@
 {
-    "version": "0.2.0",
-    "configurations": [
-        {
-            "name": "Python:Django - Ansible galaxy",
-            "type": "python",
-            "request": "launch",
-            "program": "${workspaceFolder}/manage.py",
-            "console": "integratedTerminal",
-            "args": [
-                "runserver",
-                "--noreload",
-                "8089"
-            ],
-            "env": {"DJANGO_SETTINGS_MODULE":"galaxy.settings.development"},
-            "django": true,
-            "justMyCode":false
-        }
-    ],
-    "compounds": []
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "name": "Django - Ansible galaxy",
+      "type": "python",
+      "request": "launch",
+      "stopOnEntry": false,
+      "program": "${workspaceFolder}/manage.py",
+      "console": "integratedTerminal",
+      "args": ["runserver", "--noreload", "8089"],
+      "env": {
+        "DJANGO_SETTINGS_MODULE": "galaxy.settings.development"
+      },
+      "django": true,
+      "justMyCode": false
+    },
+    {
+      "name": "Celery - Galaxy celery worker",
+      "type": "python",
+      "request": "launch",
+      "stopOnEntry": false,
+      "program": "${workspaceFolder}/manage.py",
+      "console": "integratedTerminal",
+      "args": [
+        "celery",
+        "worker",
+        "--loglevel",
+        "INFO",
+        "--broker=amqp://galaxy:galaxy@localhost:5672/galaxy",
+        "-P",
+        "solo"
+      ],
+      "env": {
+        "DJANGO_SETTINGS_MODULE": "galaxy.settings.development"
+      },
+      "django": true,
+      "justMyCode": false
+    }
+  ],
+  "compounds": []
 }

@@ -56,6 +56,12 @@ class ImportTask(PrimordialModel):
         blank=True,
     )
 
+    # provider_api_token used by celery worker to connect to provider api
+    provider_api_token = models.CharField(
+        max_length=256,
+        blank=True
+    )
+
     # GitHub repo attributes at time of import
     commit = models.CharField(
         max_length=256,

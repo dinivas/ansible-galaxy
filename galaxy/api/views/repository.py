@@ -36,6 +36,7 @@ from galaxy.api import serializers
 from galaxy.api import tasks
 from galaxy.api.views import base_views as views
 from galaxy.main import models
+from galaxy.api.keycloak import get_provider_token_from_keycloak
 
 
 __all__ = [
@@ -149,11 +150,16 @@ class RepositoryList(views.ListCreateAPIView):
                 pass
             else:
                 owner.repositories.add(repository)
-
+        keycloakUrl = request.realm.realm_api_client.server_url
+        keycloakRealm = request.realm.name
+        provider_name = repository.provider_namespace.provider.name.lower()
+        bearer_token = request.META.get('HTTP_AUTHORIZATION').split()[1]
+        provider_api_token = get_provider_token_from_keycloak(keycloakUrl, keycloakRealm, bearer_token, provider_name)
         import_task = tasks.create_import_task(
             repository,
             request.user,
-            user_initiated=True
+            user_initiated=True,
+            provider_api_token=provider_api_token['access_token']
         )
 
         serializer = self.get_serializer(repository)
@@ -239,10 +245,16 @@ class RepositoryDetail(views.RetrieveUpdateDestroyAPIView):
         # Don't create an import task if we're just updating the deprication
         # status
         if updated != ['deprecated']:
+            keycloakUrl = request.realm.realm_api_client.server_url
+            keycloakRealm = request.realm.name
+            provider_name = instance.provider_namespace.provider.name.lower()
+            bearer_token = request.META.get('HTTP_AUTHORIZATION').split()[1]
+            provider_api_token = get_provider_token_from_keycloak(keycloakUrl, keycloakRealm, bearer_token, provider_name)
             import_task = tasks.create_import_task(
                 instance,
                 request.user,
-                user_initiated=True
+                user_initiated=True,
+                provider_api_token=provider_api_token['access_token']
             )
 
             data['summary_fields']['latest_import'] = \

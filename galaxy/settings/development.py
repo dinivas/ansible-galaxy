@@ -40,6 +40,8 @@ MIDDLEWARE += [  # noqa: F405
     'debug_toolbar.middleware.DebugToolbarMiddleware',
 ]
 
+CONTENT_DOWNLOAD_DIR = '/Users/chidi/workspace/galaxy_tmp'
+
 # Static files
 # ---------------------------------------------------------
 
@@ -56,7 +58,7 @@ DATABASES = {
         'USER': 'galaxy',
         'PASSWORD': 'galaxy',
         'HOST': 'localhost',
-        'PORT': 5432,
+        'PORT': 5434,
         'CONN_MAX_AGE': None,
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
     }

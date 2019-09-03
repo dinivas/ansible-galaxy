@@ -37,6 +37,7 @@ class ContentTypeAdapter(BaseLoggerAdapter):
         super().__init__(logger, {
             'content_type': content_type,
             'content_name': content_name,
+            'task': logger.extra['task'] if 'task' in logger.extra else None
         })
 
 

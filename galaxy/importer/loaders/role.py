@@ -248,6 +248,74 @@ class RoleMetaParser(object):
                     videos.append(models.VideoLink(embed_url, video['title']))
                     break
         return videos
+    
+    def check_tox(self):
+        tox_tests_found = self._check_tox()
+        if not tox_tests_found:
+            msg = ("Molecule tests via tox not found for each stated "
+                   "supported ansible version, set 'min_ansible_version'"
+                   "in 'meta/main.yml' and see: "
+                   "https://molecule.readthedocs.io/en/latest/ci.html#tox")
+            linter_data = {
+                'is_linter_rule_violation': True,
+                'linter_type': 'importer',
+                'linter_rule_id': 'not_all_versions_tested',
+                'rule_desc': msg,
+            }
+            self.log.warning(msg, extra=linter_data)
+
+    def _check_tox(self):
+        SUPPORTED_MINOR_VERSIONS = ['2.5', '2.6', '2.7']
+
+        min_ansible_version = ''
+        if 'min_ansible_version' in self.metadata:
+            min_ansible_version = str(self.metadata['min_ansible_version'])
+        if not (min_ansible_version and self.tox_data):
+            return False
+
+        # Note: this supports a subset of the version specifiers
+        # see: https://www.python.org/dev/peps/pep-0440/#version-specifiers
+        try:
+            deps_ansible = [d for d in self.tox_data['deps'].split('\n') if
+                            d.startswith('ansible')]
+            versions = [d.split(' ')[1][9:] for d in deps_ansible if
+                        re.match(r'ansible(==|>=|~=)\d', d.split(' ')[1])]
+            versions = [v.split(',')[0] for v in versions]
+            tested_versions = ['.'.join(v.split('.')[:2]) for v in versions]
+        except Exception:
+            self.log.error('Could not parse ansible versions in tox data')
+            return False
+
+        # TODO(awcrosby): edit to support major version changes
+        try:
+            min_minor = '.'.join(min_ansible_version.split('.')[1])
+            max_minor = '.'.join(SUPPORTED_MINOR_VERSIONS[-1].split('.')[1])
+            range_of_minor = range(int(min_minor), int(max_minor) + 1)
+            supported_versions = ['2.{}'.format(minor)
+                                  for minor in range_of_minor]
+        except Exception:
+            self.log.error("Could not parse 'min_ansible_version'='{}' "
+                           "to get supported versions".format(
+                               min_ansible_version))
+            return False
+
+        if not (tested_versions and supported_versions):
+            return False
+
+        self.log.info("Versions supported based on "
+                      "'min_ansible_version'='{}': {}".format(
+                          min_ansible_version, ', '.join(supported_versions)))
+        self.log.info('Stated ansible minor versions tested via '
+                      'molecule in tox.ini: {}'.format(
+                          ', '.join(tested_versions)))
+
+        untested = set(supported_versions) - set(tested_versions)
+        if untested:
+            self.log.info('Not all supported versions tested: '
+                          '{}'.format(', '.join(untested)))
+            return False
+
+        return True
 
 
 class RoleLoader(base.BaseLoader):
@@ -306,7 +374,7 @@ class RoleLoader(base.BaseLoader):
         self.data['cloud_platforms'] = meta_parser.parse_cloud_platforms()
         self.data['dependencies'] = meta_parser.parse_dependencies()
         self.data['video_links'] = meta_parser.parse_videos()
-        # meta_parser.check_tox()
+        meta_parser.check_tox()
         readme = self._get_readme()
 
         self._check_tags()

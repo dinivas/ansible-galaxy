@@ -135,7 +135,10 @@ KEYCLOAK_OIDC_PROFILE_MODEL = 'django_keycloak.OpenIdConnectProfile'
 
 KEYCLOAK_BEARER_AUTHENTICATION_EXEMPT_PATHS = [
     r'^admin/',
-    r'^accounts/'
+    r'^accounts/',
+    r'^api/$',
+    r'^api/v1/roles/',
+    r'^api/v1/search/roles/'
 ]
 
 KEYCLOAK_SKIP_SSL_VERIFY = True

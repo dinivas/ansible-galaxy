@@ -174,10 +174,10 @@ INFLUX_DB_UI_EVENTS_DB_NAME = os.environ.get(
 # AWS settings
 # ---------------------------------------------------------
 
-AWS_ACCESS_KEY_ID = os.environ['GALAXY_AWS_ACCESS_KEY_ID']
-AWS_SECRET_ACCESS_KEY = os.environ['GALAXY_AWS_SECRET_ACCESS_KEY']
-AWS_STORAGE_BUCKET_NAME = os.environ['GALAXY_AWS_STORAGE_BUCKET_NAME']
-AWS_DEFAULT_ACL = None
+# AWS_ACCESS_KEY_ID = os.environ['GALAXY_AWS_ACCESS_KEY_ID']
+# AWS_SECRET_ACCESS_KEY = os.environ['GALAXY_AWS_SECRET_ACCESS_KEY']
+# AWS_STORAGE_BUCKET_NAME = os.environ['GALAXY_AWS_STORAGE_BUCKET_NAME']
+# AWS_DEFAULT_ACL = None
 
 
 # =========================================================

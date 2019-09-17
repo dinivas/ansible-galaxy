@@ -35,6 +35,7 @@ django-allauth==0.37.1
 django-bootstrap-form==3.4
 django-celery==3.2.2
 django-filter==2.0.0
+-e git+https://github.com/Peter-Slump/django-keycloak.git@master#egg=django_keycloak
 django-log-request-id==1.3.2
 django-prometheus==1.0.15
 django-storages[boto3]==1.7.1

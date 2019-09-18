@@ -1,6 +1,8 @@
 {
-    "python.pythonPath": "/Users/chidi/.local/share/virtualenvs/ansible-galaxy-uqPn2nFJ/bin/python",
+
+    "python.pythonPath": "/Users/chidi/.local/share/virtualenvs/ansible-galaxy-UcrMhzDR/bin/python",
     "python.linting.pylintEnabled": false,
     "python.linting.flake8Enabled": true,
     "python.linting.enabled": true
+
 }

@@ -6,6 +6,10 @@ set -o errexit
 readonly GALAXY_VENV=${GALAXY_VENV:-/usr/share/galaxy/venv}
 readonly GALAXY_NUM_WORKERS=${GALAXY_NUM_WORKERS:-1}
 
+readonly GALAXY_DJANGO_ADMIN_USER=${GALAXY_DJANGO_ADMIN_USER:-admin}
+readonly GALAXY_DJANGO_ADMIN_EMAIL=${GALAXY_DJANGO_ADMIN_EMAIL:-admin@galaxy.dinivas.io}
+readonly GALAXY_DJANGO_ADMIN_PASSWORD=${GALAXY_DJANGO_ADMIN_PASSWORD:-password}
+
 # shellcheck disable=SC2034
 VIRTUAL_ENV_DISABLE_PROMPT=1
 # shellcheck disable=SC1090
@@ -86,6 +90,9 @@ main() {
         ;;
         'manage')
             _exec_cmd "${GALAXY_VENV}/bin/galaxy-manage" "${@:2}"
+        ;;
+        'create-admin-user')
+            echo "from django.contrib.auth import get_user_model; User = get_user_model(); User.objects.create_superuser('${GALAXY_DJANGO_ADMIN_USER}', '${GALAXY_DJANGO_ADMIN_EMAIL}', '${GALAXY_DJANGO_ADMIN_PASSWORD}')" | ${GALAXY_VENV}/bin/galaxy-manage shell || echo "user already exist!"
         ;;
         *)
             _exec_cmd "$@"

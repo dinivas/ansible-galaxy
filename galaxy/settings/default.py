@@ -138,7 +138,8 @@ KEYCLOAK_BEARER_AUTHENTICATION_EXEMPT_PATHS = [
     r'^accounts/',
     r'^api/$',
     r'^api/v1/roles/',
-    r'^api/v1/search/roles/'
+    r'^api/v1/search/roles/',
+    r'^static/admin/'
 ]
 
 KEYCLOAK_SKIP_SSL_VERIFY = True

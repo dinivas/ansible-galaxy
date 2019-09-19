@@ -12,7 +12,7 @@ ENV GALAXY_VENV /usr/share/galaxy/venv
 
 # Install packages and create virtual environment
 RUN yum -y install epel-release \
-    && yum -y install git gcc make python36 python36-devel \
+    && yum -y install git gcc make python36 python36-devel nginx \
     && yum -y clean all \
     && rm -rf /var/cache/yum
 
@@ -50,7 +50,8 @@ RUN mkdir -p /etc/galaxy \
              /var/tmp/galaxy/imports \
              /var/tmp/galaxy/uploads
 
-COPY scripts/docker/release/entrypoint.sh /entrypoint
+RUN ln -s ${GALAXY_VENV}/lib/python3.6/site-packages/django/contrib/admin/static/ /usr/share/galaxy/public/static
+
 # COPY --from=galaxy-builder /galaxy/dist/VERSION /usr/share/galaxy/
 # COPY --from=galaxy-builder /galaxy/dist/*.whl /tmp
 # RUN _galaxy_wheel="/tmp/galaxy-$(< /usr/share/galaxy/VERSION)-py3-none-any.whl" \
@@ -65,6 +66,10 @@ RUN chown -R galaxy:root \
         /var/lib/galaxy \
         /var/run/galaxy \
         /var/tmp/galaxy \
+        /etc/nginx \
+        /var/log/nginx \
+        /var/lib/nginx \
+        /run \
     && chmod -R u=rwX,g=rwX\
         /etc/galaxy \
         /usr/share/galaxy \
@@ -72,9 +77,11 @@ RUN chown -R galaxy:root \
         /var/run/galaxy \
         /var/tmp/galaxy
 
-VOLUME ["/var/lib/galaxy", "/var/tmp/galaxy"]
+VOLUME ["/var/lib/galaxy", "/var/tmp/galaxy", "/etc/nginx"]
 
 WORKDIR /var/lib/galaxy
+
+COPY scripts/docker/release/entrypoint.sh /entrypoint
 
 ENV DJANGO_SETTINGS_MODULE galaxy.settings.production
 # Workaround for git running under different users

@@ -250,9 +250,9 @@ class NamespaceList(base_views.ListCreateAPIView):
         if errors:
             raise ValidationError(detail=errors)
 
-        if not request.user.is_staff and not can_update(
-                data['id'], request.user.id):
-            owners.append(request.user.id)
+        # if not request.user.is_staff and not can_update(
+        #         data['id'], request.user.id):
+        #     owners.append(request.user.id)
 
         sanitized_name = data['name'].lower().replace('-', '_')
 

@@ -17,6 +17,8 @@ requests-oauthlib
 rst2html5-tools
 semantic_version
 
+-e git+https://github.com/Peter-Slump/django-keycloak.git@master#egg=django_keycloak
+
 # Django
 django>=2.1,<2.2
 django-allauth>=0.37,<0.38

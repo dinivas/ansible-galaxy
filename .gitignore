@@ -38,6 +38,8 @@ galaxy.min.css
 ansible-deployment/
 yarn-error.log
 
+venv
+
 # NOTE(cutwater): Temporary adding developer environment related files
 # to .gitignore, however these files should not be included in project
 # .gitignore. All IDE, developer related files (not related to project

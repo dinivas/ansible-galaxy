@@ -248,7 +248,7 @@ class RoleMetaParser(object):
                     videos.append(models.VideoLink(embed_url, video['title']))
                     break
         return videos
-    
+
     def check_tox(self):
         tox_tests_found = self._check_tox()
         if not tox_tests_found:
